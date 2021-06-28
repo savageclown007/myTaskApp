@@ -55,70 +55,114 @@ class _HomeScrenState extends State<HomeScren> {
             ],
           ),
         ),
-        body: Container(
-          child: StreamBuilder(
-              stream: _db
-                  .collection("users")
-                  .doc(user.uid.toString())
-                  .collection("tasks")
-                  .orderBy("time", descending: true)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data.docs.isNotEmpty) {
-                    return ListView(
-                      children:
-                          snapshot.data.docs.map((DocumentSnapshot snaps) {
-                        Map<String, dynamic> data =
-                            snaps.data() as Map<String, dynamic>;
-                        return ListTile(
-                          
-                          title: Card(child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(data["task"].toString(),style: TextStyle(color: Colors.white,fontSize: 20),),
-                                IconButton(
-                              icon: Icon(Icons.delete
-                              ,color: Colors.white,),
-                              onPressed: () {
-                                _db
-                                    .collection("users")
-                                    .doc(user.uid.toString())
-                                    .collection("tasks")
-                                    .doc(snaps.id.toString())
-                                    .delete();
-                              },
-                            ),
-
-                              ],
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          color: Colors.grey[700]
-                          ),
-                        
-                        );
-                      }).toList(),
-                    );
-                  } else {
-                    return Container(
-                      child: Center(
-                        child: Image(image: AssetImage("assets/no_task.png")),
-                      ),
-                    );
+        body: SafeArea(
+                  child: Container(
+            child: StreamBuilder(
+                stream: _db
+                    .collection("users")
+                    .doc(user.uid.toString())
+                    .collection("tasks")
+                    .orderBy("time", descending: true)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data.docs.isNotEmpty) {
+                      return ListView(
+                        children:
+                            snapshot.data.docs.map((DocumentSnapshot snaps) {
+                          Map<String, dynamic> data =
+                              snaps.data() as Map<String, dynamic>;
+                          return ListTile(
+                            title: Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                        data["task"].toString(),
+                                        style: TextStyle(
+                                            color: data["done"]?Colors.black:Colors.white, fontSize: 20),
+                                      )),
+                                      data["done"]
+                                          ? IconButton(
+                                              icon: Icon(
+                                                Icons.remove_done,
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () {
+                                                _db
+                                                    .collection("users")
+                                                    .doc(user.uid.toString())
+                                                    .collection("tasks")
+                                                    .doc(snaps.id.toString())
+                                                    .set({
+                                                  "task": data["task"],
+                                                  "time": data["time"],
+                                                  "done": false,
+                                                });
+                                              },
+                                            )
+                                          : IconButton(
+                                              icon: Icon(
+                                                Icons.done_all,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                _db
+                                                    .collection("users")
+                                                    .doc(user.uid.toString())
+                                                    .collection("tasks")
+                                                    .doc(snaps.id.toString())
+                                                    .set({
+                                                  "task": data["task"],
+                                                  "time": data["time"],
+                                                  "done": true,
+                                                });
+                                              },
+                                            ),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: data["done"]?Colors.black:Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          _db
+                                              .collection("users")
+                                              .doc(user.uid.toString())
+                                              .collection("tasks")
+                                              .doc(snaps.id.toString())
+                                              .delete();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                color: data["done"]?primaryColor:Colors.grey[700]),
+                          );
+                        }).toList(),
+                      );
+                    } else {
+                      return Container(
+                        child: Center(
+                          child: Image(image: AssetImage("assets/no_task.png")),
+                        ),
+                      );
+                    }
                   }
-                }
 
-                return Container(
-                  child: Center(
-                    child: Image(image: AssetImage("assets/no_task.png")),
-                  ),
-                );
-              }),
+                  return Container(
+                    child: Center(
+                      child: Image(image: AssetImage("assets/no_task.png")),
+                    ),
+                  );
+                }),
+          ),
         ));
   }
 
