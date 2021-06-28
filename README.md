@@ -1,6 +1,7 @@
 # mytask
 
-A new Flutter project.
+A new myTask App made using Flutter which provides the functionality to signIn using email and password, google account and phone number.
+Firebase is used for authentication and cloud firestore realtime database is used for storing the tasks and user signIn information.
 
 ## Getting Started
 
