@@ -4,7 +4,7 @@ A new myTask App made using Flutter which provides the functionality to signIn u
 Firebase is used for authentication and cloud firestore realtime database is used for storing the tasks and user signIn information.
 
 ## App-Release
-<a id="raw-url" href="https://raw.githubusercontent.com/savageclown007/myTaskApp/master/app-armeabi-v7a-release.apk">Download FILE</a>
+<a id="raw-url" href="https://raw.githubusercontent.com/savageclown007/myTaskApp/master/app-armeabi-v7a-release.apk">Download App</a>
 
 ## Screenshots
 <img src="https://github.com/savageclown007/myTaskApp/blob/master/screenshots/LogIn%20Screen.jpeg" width="400px" height="auto"> <img src="https://github.com/savageclown007/myTaskApp/blob/master/screenshots/HomeScreen.jpeg" width="400px" height="auto">
